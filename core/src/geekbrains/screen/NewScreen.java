@@ -5,43 +5,29 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
 
-import geekbrains.MyStarGame;
 import geekbrains.base.BaseScreen;
 import geekbrains.math.Rect;
 import geekbrains.sprite.Background;
-import geekbrains.sprite.Exit_Button;
-import geekbrains.sprite.Play_Button;
 import geekbrains.sprite.Star;
 
-public class MenuScreen extends BaseScreen {
-    private MyStarGame game;
+public class NewScreen extends BaseScreen {
     private Texture bgr;
     private TextureAtlas atlas;
     private TextureAtlas mainAtlas;
     private Background background;
     private Star star[];
-    private Play_Button play;
-    private Exit_Button exit;
-
-    public MenuScreen(MyStarGame game) {
-        this.game = game;
-    }
 
     @Override
     public void show() {
         super.show();
         atlas = new TextureAtlas("textures/mainAtlas.tpack");
         bgr = new Texture("textures/background.jpg");
-        mainAtlas = new TextureAtlas("textures/menuAtlas.tpack");
         background = new Background(new TextureRegion(bgr));
         star = new Star[256];
         for (int i = 0; i < star.length; i++) {
             star[i] = new Star(atlas);
         }
-        play = new Play_Button(mainAtlas, this);
-        exit = new Exit_Button(mainAtlas);
     }
 
     @Override
@@ -65,8 +51,6 @@ public class MenuScreen extends BaseScreen {
         for (int i = 0; i < star.length; i++) {
             star[i].draw(batch);
         }
-        play.draw(batch);
-        exit.draw(batch);
         batch.end();
     }
 
@@ -77,20 +61,9 @@ public class MenuScreen extends BaseScreen {
             star[i].resize(worldBounds);
         }
     }
-
     @Override
-    public boolean touchDown(Vector2 touch, int pointer) {
-        play.touchDown(touch,pointer);
-        exit.touchDown(touch,pointer);
-        return super.touchDown(touch,pointer);
-
-    }
-
-    @Override
-    public boolean touchUp(Vector2 touch, int pointer) {
-        play.touchUp(touch,pointer);
-        exit.touchUp(touch,pointer);
-        return super.touchUp(touch, pointer);
+    public void resume() {
+        super.resume();
     }
 
     @Override
@@ -98,11 +71,6 @@ public class MenuScreen extends BaseScreen {
 
         batch.dispose();
         atlas.dispose();
-        mainAtlas.dispose();
         super.dispose();
-    }
-
-    public MyStarGame getGame() {
-        return game;
     }
 }

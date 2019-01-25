@@ -53,7 +53,12 @@ public class BaseScreen implements Screen, InputProcessor {
         MatrixUtils.calcTransitionMatrix(worldToGl,worldBounds,glBounds);
         batch.setProjectionMatrix(worldToGl);
         MatrixUtils.calcTransitionMatrix(screenToWorld, screenBounds, worldBounds);
+        resize(worldBounds);
     }
+
+    public void resize(Rect worldBounds) {
+    }
+
 
     protected Vector2 getTouch(){
         return touch;
@@ -111,6 +116,12 @@ public class BaseScreen implements Screen, InputProcessor {
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        touch.set(screenX, screenBounds.getHeight() - screenY).mul(screenToWorld);
+        touchUp(touch,pointer);
+        return false;
+    }
+
+    public boolean touchUp(Vector2 touch, int pointer) {
         return false;
     }
 

@@ -8,6 +8,10 @@ public class DesktopLauncher {
 	public static void main (String[] arg) {
 		System.setProperty("user.name","\\xD0\\x92\\xD0\\xBB\\xD0\\xB0\\xD0\\xB4\\xD0\\xB8\\xD0\\xBC\\xD0\\xB8\\xD1\\x80");
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+		float aspect = 3f/4f;
+		config.width = 400;
+		config.height = (int) (config.width / aspect);
+		config.resizable  = false;
 		new LwjglApplication(new MyStarGame(), config);
 	}
 }
