@@ -10,11 +10,12 @@ import geekbrains.base.BaseScreen;
 public class MenuScreen extends BaseScreen {
     Texture img;
     Texture bgr;
-    Vector2 direction;
+    Vector2 touch;
     Vector2 v;
     Vector2 pos;
-    float way;
+    Vector2 motion;
     float speed;
+    float rate;
 
     @Override
     public void show() {
@@ -23,9 +24,10 @@ public class MenuScreen extends BaseScreen {
         img = new Texture("badlogic.jpg");
         pos = new Vector2(0,0);
         v = new Vector2();
-        way = 0;
-        direction = new Vector2();
+        touch = new Vector2();
+        motion = new Vector2();
         speed = 0.01f;
+        rate = 5;
     }
 
     @Override
@@ -37,44 +39,39 @@ public class MenuScreen extends BaseScreen {
         batch.draw(bgr, -0.5f, -0.5f, 1f, 1f);
         batch.draw(img, pos.x, pos.y, 0.2f, 0.2f);
         batch.end();
-        if (way != 0){
-            if (way < v.len()){
-                way = 0;
-                v.set(0,0);
-                direction.set(0,0);
-            } else {
-                pos.add(v);
-                way -= v.len();
-            }
+        motion.set(touch);
+        if (motion.sub(pos).len() < speed){
+            pos.set(touch);
+        } else {
+            pos.add(v);
         }
     }
 
     @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        super.touchDown(screenX, screenY, pointer, button);
-        direction.set(getTouch().x,getTouch().y);
-        way = direction.sub(pos).len();
-        v = direction.nor().scl(speed);
-        return true;
+    public boolean touchDown(Vector2 touch, int pointer) {
+        this.touch = touch;
+        v.set(touch.cpy().sub(pos).setLength(speed));
+        return super.touchDown(touch,pointer);
     }
+
 
     @Override
     public boolean keyDown(int keycode) {
         switch (keycode){
             case 19:
-                v = new Vector2(0,speed);
+                v = new Vector2(0,speed*rate);
                 break;
             case 20:
-                v = new Vector2(0,-speed);
+                v = new Vector2(0,-speed*rate);
                 break;
             case 21:
-                v = new Vector2(-speed,0);
+                v = new Vector2(-speed*rate,0);
                 break;
             case 22:
-                v = new Vector2(speed,0);
+                v = new Vector2(speed*rate,0);
                 break;
         }
-        way = 0.1f;
+        this.touch = pos.add(v);
         return super.keyDown(keycode);
     }
 
