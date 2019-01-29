@@ -6,11 +6,11 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import geekbrains.math.Rect;
 import geekbrains.math.Rnd;
 
-public class Exit_Button extends ScaledTouchUpButton {
+public class ExitButton extends ScaledTouchUpButton {
 
     private Rect worldBounds;
 
-    public Exit_Button(TextureAtlas atlas) {
+    public ExitButton(TextureAtlas atlas) {
         super(atlas.findRegion("btExit"));
         setHeightProportion(0.3f);
         setBottom(-0.3f);

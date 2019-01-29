@@ -11,8 +11,8 @@ import geekbrains.MyStarGame;
 import geekbrains.base.BaseScreen;
 import geekbrains.math.Rect;
 import geekbrains.sprite.Background;
-import geekbrains.sprite.Exit_Button;
-import geekbrains.sprite.Play_Button;
+import geekbrains.sprite.ExitButton;
+import geekbrains.sprite.PlayButton;
 import geekbrains.sprite.Star;
 
 public class MenuScreen extends BaseScreen {
@@ -22,8 +22,8 @@ public class MenuScreen extends BaseScreen {
     private TextureAtlas mainAtlas;
     private Background background;
     private Star star[];
-    private Play_Button play;
-    private Exit_Button exit;
+    private PlayButton play;
+    private ExitButton exit;
 
     public MenuScreen(MyStarGame game) {
         this.game = game;
@@ -40,8 +40,8 @@ public class MenuScreen extends BaseScreen {
         for (int i = 0; i < star.length; i++) {
             star[i] = new Star(atlas);
         }
-        play = new Play_Button(mainAtlas, this);
-        exit = new Exit_Button(mainAtlas);
+        play = new PlayButton(mainAtlas, this);
+        exit = new ExitButton(mainAtlas);
     }
 
     @Override

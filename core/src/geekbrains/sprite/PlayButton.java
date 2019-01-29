@@ -8,11 +8,11 @@ import geekbrains.math.Rect;
 import geekbrains.screen.MenuScreen;
 import geekbrains.screen.NewScreen;
 
-public class Play_Button extends ScaledTouchUpButton {
+public class PlayButton extends ScaledTouchUpButton {
 
     private Rect worldBounds;
 
-    public Play_Button(TextureAtlas atlas, MenuScreen screen) {
+    public PlayButton(TextureAtlas atlas, MenuScreen screen) {
         super(atlas.findRegion("btPlay"));
         setHeightProportion(0.3f);
         setTop(0.4f);
