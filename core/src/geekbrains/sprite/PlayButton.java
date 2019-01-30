@@ -1,12 +1,10 @@
 package geekbrains.sprite;
 
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
-import geekbrains.MyStarGame;
 import geekbrains.math.Rect;
 import geekbrains.screen.MenuScreen;
-import geekbrains.screen.NewScreen;
+import geekbrains.screen.GameScreen;
 
 public class PlayButton extends ScaledTouchUpButton {
 
@@ -21,7 +19,7 @@ public class PlayButton extends ScaledTouchUpButton {
 
     @Override
     public void action() {
-        screen.getGame().setScreen(new NewScreen());
+        screen.getGame().setScreen(new GameScreen());
     }
 
     @Override
