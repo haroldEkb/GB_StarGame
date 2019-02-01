@@ -1,21 +1,28 @@
 package geekbrains.sprite.game;
 
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
+import geekbrains.math.Rect;
 import geekbrains.pool.BulletPool;
 
 public class EnemyShip extends Ship {
 
     private Vector2 v0 = new Vector2();
 
-    public EnemyShip(Sound shootSound, BulletPool bulletPool) {
+    public EnemyShip(TextureAtlas atlas, Sound shootSound, BulletPool bulletPool) {
         super();
         this.shootSound = shootSound;
         this.bulletPool = bulletPool;
         this.v.set(v0);
         this.bulletV = new Vector2();
+        this.reloadInterval = 0.2f;
+        this.bulletHeight = 0.01f;
+        this.damage = 1;
+        this.hp = 100;
+        this.bulletRegion = atlas.findRegion("bulletEnemy");
     }
 
     @Override
@@ -24,6 +31,11 @@ public class EnemyShip extends Ship {
         this.pos.mulAdd(v, delta);
         if (isOutside(worldBounds)) {
             destroy();
+        }
+        reloadTimer += delta;
+        if (reloadTimer >= reloadInterval) {
+            reloadTimer = 0f;
+            shoot();
         }
     }
 
@@ -36,7 +48,8 @@ public class EnemyShip extends Ship {
             int bulletDamage,
             float reloadInterval,
             float height,
-            int hp
+            int hp,
+            Rect worldBounds
     ) {
         this.regions = regions;
         this.v0.set(v0);
@@ -47,6 +60,7 @@ public class EnemyShip extends Ship {
         this.reloadInterval = reloadInterval;
         setHeightProportion(height);
         this.hp = hp;
+        this.worldBounds = worldBounds;
         reloadTimer = reloadInterval;
         v.set(v0);
     }
