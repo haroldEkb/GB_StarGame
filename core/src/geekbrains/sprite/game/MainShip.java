@@ -12,6 +12,8 @@ import geekbrains.math.Rect;
 import geekbrains.pool.BulletPool;
 
 public class MainShip extends Sprite {
+    private static final int INVALID_POINTER = -1;
+
     private Rect worldBounds;
 
     private final Vector2 v0 = new Vector2(0.5f, 0);
@@ -23,6 +25,12 @@ public class MainShip extends Sprite {
     private BulletPool bulletPool;
     private TextureRegion bulletRegion;
 
+    private int leftPointer = INVALID_POINTER;
+    private int rightPointer = INVALID_POINTER;
+
+    private float reloadInterval;
+    private float reloadTimer;
+
     private Sound shotSound = Gdx.audio.newSound(Gdx.files.internal("sound/shot.wav"));
 
     public MainShip(TextureAtlas atlas, BulletPool bulletPool) {
@@ -30,6 +38,7 @@ public class MainShip extends Sprite {
         setHeightProportion(0.15f);
         this.bulletPool = bulletPool;
         this.bulletRegion = atlas.findRegion("bulletMainShip");
+        reloadInterval = 0.2f;
     }
 
     @Override
@@ -43,6 +52,11 @@ public class MainShip extends Sprite {
     public void update(float delta) {
         super.update(delta);
         pos.mulAdd(v, delta);
+        reloadTimer += delta;
+        if (reloadTimer >= reloadInterval) {
+            reloadTimer = 0f;
+            shoot();
+        }
         if (worldBounds.getHalfWidth() < pos.x + this.getHalfWidth()) {
             turnBack(delta);
         }
@@ -56,7 +70,6 @@ public class MainShip extends Sprite {
     }
 
     public boolean keyDown(int keycode) {
-        System.out.println(worldBounds.getHalfWidth());
         switch (keycode) {
             case Input.Keys.A:
             case Input.Keys.LEFT:
@@ -67,9 +80,6 @@ public class MainShip extends Sprite {
             case Input.Keys.RIGHT:
                 isPressedRight = true;
                 moveRight();
-                break;
-            case Input.Keys.UP:
-                shoot();
                 break;
         }
         return false;
@@ -101,10 +111,13 @@ public class MainShip extends Sprite {
 
     @Override
     public boolean touchDown(Vector2 touch, int pointer) {
-        if (touch.x > 0) {
+        if (touch.x > 0){
+            if (leftPointer != INVALID_POINTER) return false;
+            leftPointer = pointer;
             moveRight();
-        }
-        if (touch.x < 0) {
+        } else {
+            if (rightPointer != INVALID_POINTER) return false;
+            rightPointer = pointer;
             moveLeft();
         }
         return super.touchDown(touch, pointer);
@@ -112,7 +125,22 @@ public class MainShip extends Sprite {
 
     @Override
     public boolean touchUp(Vector2 touch, int pointer) {
-        stop();
+        if (pointer == leftPointer) {
+            leftPointer = INVALID_POINTER;
+            if (rightPointer != INVALID_POINTER){
+                moveRight();
+            } else {
+                stop();
+            }
+        }
+        if (pointer == rightPointer) {
+            rightPointer = INVALID_POINTER;
+            if (leftPointer != INVALID_POINTER){
+                moveLeft();
+            } else {
+                stop();
+            }
+        }
         return super.touchUp(touch, pointer);
     }
 
@@ -132,5 +160,9 @@ public class MainShip extends Sprite {
         Bullet bullet = bulletPool.obtain();
         bullet.set(this, bulletRegion, pos, new Vector2(0, 0.5f), 0.01f, worldBounds, 1);
         shotSound.play(0.5f);
+    }
+
+    public void dispose(){
+        shotSound.dispose();
     }
 }

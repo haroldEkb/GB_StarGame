@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Vector2;
 import geekbrains.base.BaseScreen;
 import geekbrains.math.Rect;
 import geekbrains.pool.BulletPool;
+import geekbrains.pool.ExplosionPool;
 import geekbrains.sprite.Background;
 import geekbrains.sprite.Star;
 import geekbrains.sprite.game.MainShip;
@@ -30,6 +31,7 @@ public class GameScreen extends BaseScreen {
         super.show();
         music = Gdx.audio.newMusic(Gdx.files.internal("sound/music.mp3"));
         music.play();
+        music.setLooping(true);
         atlas = new TextureAtlas("textures/mainAtlas.tpack");
         bgr = new Texture("textures/background-1.jpg");
         background = new Background(new TextureRegion(bgr));
@@ -89,11 +91,11 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public void dispose() {
-
         batch.dispose();
         atlas.dispose();
         bulletPool.dispose();
         super.dispose();
+        mainShip.dispose();
     }
 
     @Override
