@@ -25,6 +25,7 @@ public class GameScreen extends BaseScreen {
     private MainShip mainShip;
     private BulletPool bulletPool;
     private Music music;
+    private ExplosionPool explosionPool;
 
     @Override
     public void show() {
@@ -41,6 +42,7 @@ public class GameScreen extends BaseScreen {
         }
         bulletPool = new BulletPool();
         mainShip = new MainShip(atlas, bulletPool);
+        explosionPool = new ExplosionPool(atlas);
     }
 
     @Override
@@ -56,11 +58,13 @@ public class GameScreen extends BaseScreen {
             star[i].update(delta);
         }
         bulletPool.updateActiveSprites(delta);
+        explosionPool.updateActiveSprites(delta);
         mainShip.update(delta);
     }
 
     public void deleteAllDestroyed(){
         bulletPool.freeAllDestroyedActiveSprites();
+        explosionPool.freeAllDestroyedActiveSprites();
     }
 
     public void draw(float delta){
@@ -73,6 +77,7 @@ public class GameScreen extends BaseScreen {
         }
         mainShip.draw(batch);
         bulletPool.drawActiveSprites(batch);
+        explosionPool.drawActiveSprites(batch);
         batch.end();
     }
 
@@ -94,6 +99,7 @@ public class GameScreen extends BaseScreen {
         batch.dispose();
         atlas.dispose();
         bulletPool.dispose();
+        explosionPool.dispose();
         super.dispose();
         mainShip.dispose();
     }
