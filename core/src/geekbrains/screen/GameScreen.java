@@ -10,11 +10,11 @@ import com.badlogic.gdx.math.Vector2;
 
 import geekbrains.base.BaseScreen;
 import geekbrains.math.Rect;
+import geekbrains.sprite.Star;
 import geekbrains.pool.BulletPool;
 import geekbrains.pool.EnemyPool;
 import geekbrains.pool.ExplosionPool;
 import geekbrains.sprite.Background;
-import geekbrains.sprite.game.Bullet;
 import geekbrains.sprite.game.MainShip;
 import geekbrains.utils.EnemyEmitter;
 
@@ -22,7 +22,7 @@ public class GameScreen extends BaseScreen {
     private Texture bgr;
     private TextureAtlas atlas;
     private Background background;
-    private Bullet.Star star[];
+    private Star star[];
     private MainShip mainShip;
     private BulletPool bulletPool;
     private Music music;
@@ -39,9 +39,9 @@ public class GameScreen extends BaseScreen {
         atlas = new TextureAtlas("textures/mainAtlas.tpack");
         bgr = new Texture("textures/background-1.jpg");
         background = new Background(new TextureRegion(bgr));
-        star = new Bullet.Star[256];
+        star = new Star[256];
         for (int i = 0; i < star.length; i++) {
-            star[i] = new Bullet.Star(atlas);
+            star[i] = new Star(atlas);
         }
         bulletPool = new BulletPool();
         mainShip = new MainShip(atlas, bulletPool);

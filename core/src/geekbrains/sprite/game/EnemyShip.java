@@ -22,6 +22,9 @@ public class EnemyShip extends Ship {
     public void update(float delta) {
         super.update(delta);
         this.pos.mulAdd(v, delta);
+        if (isOutside(worldBounds)) {
+            destroy();
+        }
     }
 
     public void set(
