@@ -11,9 +11,9 @@ import geekbrains.MyStarGame;
 import geekbrains.base.BaseScreen;
 import geekbrains.math.Rect;
 import geekbrains.sprite.Background;
+import geekbrains.sprite.Star;
 import geekbrains.sprite.ExitButton;
 import geekbrains.sprite.PlayButton;
-import geekbrains.sprite.Star;
 
 public class MenuScreen extends BaseScreen {
     private MyStarGame game;

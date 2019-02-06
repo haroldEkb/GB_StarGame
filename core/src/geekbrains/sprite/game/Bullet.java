@@ -2,6 +2,7 @@ package geekbrains.sprite.game;
 
 import geekbrains.base.Sprite;
 import geekbrains.math.Rect;
+
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
@@ -50,4 +51,5 @@ public class Bullet extends Sprite {
     public Object getOwner() {
         return owner;
     }
+
 }
