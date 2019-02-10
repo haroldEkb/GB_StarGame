@@ -7,12 +7,18 @@ import com.badlogic.gdx.math.Vector2;
 
 import geekbrains.math.Rect;
 import geekbrains.pool.BulletPool;
+import geekbrains.pool.ExplosionPool;
 
 public class EnemyShip extends Ship {
 
-    private Vector2 v0 = new Vector2();
+    private enum State {DESCENT, FIGHT}
 
-    public EnemyShip(TextureAtlas atlas, Sound shootSound, BulletPool bulletPool) {
+    private Vector2 v0 = new Vector2();
+    private State state;
+    private Vector2 descentV = new Vector2(0, -0.15f);
+    private MainShip mainShip;
+
+    public EnemyShip(TextureAtlas atlas, Sound shootSound, BulletPool bulletPool, ExplosionPool explosionPool, MainShip mainShip) {
         super();
         this.shootSound = shootSound;
         this.bulletPool = bulletPool;
@@ -23,20 +29,34 @@ public class EnemyShip extends Ship {
         this.damage = 1;
         this.hp = 100;
         this.bulletRegion = atlas.findRegion("bulletEnemy");
+        this.explosionPool = explosionPool;
+        this.mainShip = mainShip;
     }
 
     @Override
     public void update(float delta) {
         super.update(delta);
         this.pos.mulAdd(v, delta);
-        if (isOutside(worldBounds)) {
-            destroy();
+        switch (state){
+            case DESCENT:
+                if (getTop() <= worldBounds.getTop()){
+                    v.set(v0);
+                    state = State.FIGHT;
+                }
+                break;
+            case FIGHT:
+                if (getBottom() < worldBounds.getBottom()) {
+                    mainShip.damage(this.getDamage());
+                    destroy();
+                }
+                reloadTimer += delta;
+                if (reloadTimer >= reloadInterval) {
+                    reloadTimer = 0f;
+                    shoot();
+                }
+                break;
         }
-        reloadTimer += delta;
-        if (reloadTimer >= reloadInterval) {
-            reloadTimer = 0f;
-            shoot();
-        }
+
     }
 
     public void set(
@@ -62,6 +82,20 @@ public class EnemyShip extends Ship {
         this.hp = hp;
         this.worldBounds = worldBounds;
         reloadTimer = reloadInterval;
-        v.set(v0);
+        v.set(descentV);
+        state = State.DESCENT;
+    }
+
+    public boolean isBulletCollision(Rect bullet){
+        return !(bullet.getRight() < getLeft() ||
+                bullet.getLeft() > getRight() ||
+                bullet.getBottom() > getTop() ||
+                bullet.getTop() < pos.y);
+    }
+
+    @Override
+    public void destroy() {
+        super.destroy();
+        boom();
     }
 }

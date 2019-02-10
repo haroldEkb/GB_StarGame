@@ -28,7 +28,7 @@ public class Sprite extends Rect {
 
     public Sprite(TextureRegion region, int rows, int cols, int frames) {
         if (region == null) {
-            throw new NullPointerException("Create Sprite witth null region");
+            throw new NullPointerException("Create Sprite with null region");
         }
         this.regions = Regions.split(region, rows, cols, frames);
     }
@@ -85,6 +85,10 @@ public class Sprite extends Rect {
 
     public void destroy() {
         this.isDestroyed = true;
+    }
+
+    public void recreate(){
+        this.isDestroyed = false;
     }
 
     public void flushDestroy() {
