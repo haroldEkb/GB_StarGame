@@ -15,9 +15,8 @@ public class NewGameButton extends ScaledTouchUpButton {
     public NewGameButton(TextureAtlas atlas, GameScreen screen) {
         super(atlas.findRegion("button_new_game"));
         this.gameScreen = screen;
-        setHeight(0.1f);
-        setWidth(0.4f);
-        setTop(-0.1f);
+        setHeightProportion(0.05f);
+        setTop(-0.05f);
     }
 
     @Override
