@@ -1,10 +1,8 @@
 package geekbrains.sprite;
 
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
-import geekbrains.MyStarGame;
 import geekbrains.base.Sprite;
 import geekbrains.screen.MenuScreen;
 
