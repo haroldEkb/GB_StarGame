@@ -20,17 +20,19 @@ import geekbrains.pool.ExplosionPool;
 import geekbrains.sprite.Background;
 import geekbrains.sprite.game.Bullet;
 import geekbrains.sprite.game.EnemyShip;
+import geekbrains.sprite.game.HealthBar;
 import geekbrains.sprite.game.MainShip;
 import geekbrains.sprite.game.MessageGameOver;
 import geekbrains.sprite.game.NewGameButton;
+import geekbrains.sprite.game.StatusFrame;
 import geekbrains.utils.EnemyEmitter;
 import geekbrains.utils.Font;
 
 public class GameScreen extends BaseScreen {
 
-    private static final String FRAGS = "Frags: ";
+    private static final String FRAGS = "Frags:";
     private static final String HP = "HP: ";
-    private static final String LEVEL = "Level: ";
+    private static final String LEVEL = "Lvl:";
 
     private StringBuilder sbFrags = new StringBuilder();
     private StringBuilder sbHp = new StringBuilder();
@@ -39,6 +41,7 @@ public class GameScreen extends BaseScreen {
 
     private Texture bgr;
     private TextureAtlas atlas;
+    private TextureAtlas statusAtlas;
     private Background background;
     private Star star[];
     private MainShip mainShip;
@@ -55,6 +58,8 @@ public class GameScreen extends BaseScreen {
     private GameState state;
     private MessageGameOver gameOver;
     private NewGameButton newGame;
+    private StatusFrame frame;
+    private HealthBar bar;
 
     @Override
     public void show() {
@@ -62,11 +67,15 @@ public class GameScreen extends BaseScreen {
         state = GameState.ON;
         music = Gdx.audio.newMusic(Gdx.files.internal("sound/music.mp3"));
         atlas = new TextureAtlas("textures/mainAtlas.tpack");
+        statusAtlas = new TextureAtlas("textures/status.tpack");
         bgr = new Texture("textures/background-1.jpg");
         gameOver = new MessageGameOver(atlas);
         background = new Background(new TextureRegion(bgr));
         this.font = new Font("font/font.fnt", "font/font.png");
-        font.setSize(0.05f);
+        font.setSize(0.02f);
+        frame = new StatusFrame(statusAtlas);
+        bar = new HealthBar(statusAtlas);
+
         star = new Star[256];
         for (int i = 0; i < star.length; i++) {
             star[i] = new Star(atlas);
@@ -127,6 +136,8 @@ public class GameScreen extends BaseScreen {
                 }
                 if (mainShip.isBulletCollision(bullet)) {
                     mainShip.damage(bullet.getDamage());
+                    bar.setWidth(bar.getInitialWidth()*mainShip.getHp()/100);
+                    bar.setLeft(-0.2f);
                     bullet.destroy();
                 }
             }
@@ -162,6 +173,7 @@ public class GameScreen extends BaseScreen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
         background.draw(batch);
+        drawStatus();
         printInfo();
         for (Star aStar : star) {
             aStar.draw(batch);
@@ -180,21 +192,29 @@ public class GameScreen extends BaseScreen {
 
     private void printInfo() {
         sbFrags.setLength(0);
+        //font.draw(batch, sbFrags.append(FRAGS).append(frage), worldBounds.getLeft(), worldBounds.getTop());
         font.draw(batch, sbFrags.append(FRAGS).append(frage), worldBounds.getLeft(), worldBounds.getTop());
 
         sbHp.setLength(0);
-        font.draw(batch, sbHp.append(HP).append(mainShip.getHp()), worldBounds.pos.x, worldBounds.getTop(), Align.center);
+        //font.draw(batch, sbHp.append(HP).append(mainShip.getHp()), worldBounds.pos.x, worldBounds.getTop(), Align.center);
+        font.draw(batch, sbHp.append(HP).append(mainShip.getHp()), 0.07f, 0.417f);
 
         sbLevel.setLength(0);
-        font.draw(batch, sbLevel.append(LEVEL).append(enemyEmitter.getLevel()), worldBounds.getRight(), worldBounds.getTop(), Align.right);
+        //font.draw(batch, sbLevel.append(LEVEL).append(enemyEmitter.getLevel()), worldBounds.getRight(), worldBounds.getTop(), Align.right);
+        font.draw(batch, sbLevel.append(LEVEL).append(enemyEmitter.getLevel()), 0.18f, 0.417f);
 
+    }
+
+    private void drawStatus(){
+        bar.draw(batch);
+        frame.draw(batch);
     }
 
     @Override
     public void resize(Rect worldBounds) {
         background.resize(worldBounds);
-        for (int i = 0; i < star.length; i++) {
-            star[i].resize(worldBounds);
+        for (Star aStar : star) {
+            aStar.resize(worldBounds);
         }
         mainShip.resize(worldBounds);
 
@@ -265,6 +285,7 @@ public class GameScreen extends BaseScreen {
         mainShip.restart();
         frage = 0;
         enemyEmitter.setLevel(1);
+        bar.start();
         music.play();
         music.setLooping(true);
     }
