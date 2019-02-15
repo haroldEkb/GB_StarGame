@@ -1,0 +1,19 @@
+
+status.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+frame
+  rotate: false
+  xy: 1, 62
+  size: 812, 143
+  orig: 812, 143
+  offset: 0, 0
+  index: -1
+bar
+  rotate: false
+  xy: 1, 1
+  size: 495, 59
+  orig: 495, 59
+  offset: 0, 0
+  index: -1

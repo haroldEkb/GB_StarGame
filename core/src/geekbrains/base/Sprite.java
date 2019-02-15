@@ -35,7 +35,7 @@ public class Sprite extends Rect {
 
     public void setHeightProportion(float height){
         setHeight(height);
-        float aspect = regions[frame].getRegionWidth()/(float)regions[frame].getRegionWidth();
+        float aspect = regions[frame].getRegionWidth()/(float)regions[frame].getRegionHeight();
         setWidth(height*aspect);
     }
 
@@ -85,10 +85,6 @@ public class Sprite extends Rect {
 
     public void destroy() {
         this.isDestroyed = true;
-    }
-
-    public void recreate(){
-        this.isDestroyed = false;
     }
 
     public void flushDestroy() {

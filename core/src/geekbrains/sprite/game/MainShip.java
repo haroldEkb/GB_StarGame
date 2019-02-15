@@ -34,6 +34,14 @@ public class MainShip extends Ship {
         this.hp = 1;
     }
 
+
+    public void restart(){
+        flushDestroy();
+        stop();
+        this.setHp(100);
+        setLeft(-this.getHalfWidth());
+    }
+
     @Override
     public void resize(Rect worldBounds) {
         super.resize(worldBounds);
